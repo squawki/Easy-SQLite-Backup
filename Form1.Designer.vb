@@ -240,10 +240,10 @@ Partial Class Form1
         radio_vacumm.Font = New Font("Segoe UI", 10F)
         radio_vacumm.Location = New Point(47, 229)
         radio_vacumm.Name = "radio_vacumm"
-        radio_vacumm.Size = New Size(124, 23)
+        radio_vacumm.Size = New Size(121, 23)
         radio_vacumm.TabIndex = 9
         radio_vacumm.TabStop = True
-        radio_vacumm.Text = "VACUMM INTO"
+        radio_vacumm.Text = "VACUUM INTO"
         radio_vacumm.UseVisualStyleBackColor = True
         ' 
         ' radio_filecopy
