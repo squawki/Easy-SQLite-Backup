@@ -65,40 +65,65 @@ Public Class Form1
 
 
         If radio_vacumm.Checked Then
+            Dim connectionString As String = "Data Source=" & sourcelocation & ";Version=3;"
 
-            'Vacumm SQLiteMethod
+
             Try
                 ' Check if the source file exists
                 If File.Exists(sourcelocation) Then
-                    ' Connect to the source database
-                    Using sourceConnection As New SQLiteConnection($"Data Source={sourcelocation}")
-                        sourceConnection.Open()
 
-                        ' Execute VACUUM command to optimize and clean up the source database
-                        Using cmd As New SQLiteCommand("VACUUM", sourceConnection)
-                            cmd.ExecuteNonQuery()
+
+                    Dim query As String = "VACUUM main into @backup_location;"
+                    Dim didexport As Integer
+                    Using conn As New SQLiteConnection(connectionString)
+                        conn.Open()
+                        Using cmd As New SQLiteCommand(query, conn)
+                            ' Add parameters
+                            cmd.Parameters.AddWithValue("@backup_location", _backuplocation)
+
+                            ' Execute the Vacuum statement
+                            Try
+                                didexport = cmd.ExecuteNonQuery
+                                'MsgBox("Response: " & cmd.ExecuteNonQuery)
+                            Catch ex As Exception
+                                MsgBox(ex.Message)
+                            End Try
 
                         End Using
                     End Using
 
-                    ' Copy the optimized source database to the backup destination
-                    File.Copy(sourcelocation, _backuplocation, True)
+                    'MsgBox("Silent: " & silent & vbNewLine & "Did Export: " & didexport)
 
-                    If Not silent Then
+                    If silent = False And didexport = 0 Then
                         MessageBox.Show("Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End If
                 Else
-                    If Not silent Then
+                    If silent = False Then
                         MessageBox.Show("Source database file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
                 End If
             Catch ex As Exception
-                If Not silent Then
+                If silent = False Then
                     MessageBox.Show("Error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End If
             End Try
-
         End If
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     End Sub
