@@ -45,6 +45,7 @@ Partial Class Form1
         radio_vacumm = New RadioButton()
         radio_filecopy = New RadioButton()
         Label6 = New Label()
+        chk_zipbackup = New CheckBox()
         Panel1.SuspendLayout()
         CType(numeric_automatedInterval, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -91,7 +92,7 @@ Partial Class Form1
         chk_appendTimeStamp.Checked = True
         chk_appendTimeStamp.CheckState = CheckState.Checked
         chk_appendTimeStamp.Font = New Font("Segoe UI", 12F)
-        chk_appendTimeStamp.Location = New Point(48, 157)
+        chk_appendTimeStamp.Location = New Point(48, 148)
         chk_appendTimeStamp.Name = "chk_appendTimeStamp"
         chk_appendTimeStamp.Size = New Size(283, 25)
         chk_appendTimeStamp.TabIndex = 4
@@ -268,11 +269,23 @@ Partial Class Form1
         Label6.TabIndex = 12
         Label6.Text = "Backup Mode:"
         ' 
+        ' chk_zipbackup
+        ' 
+        chk_zipbackup.AutoSize = True
+        chk_zipbackup.Font = New Font("Segoe UI", 12F)
+        chk_zipbackup.Location = New Point(48, 173)
+        chk_zipbackup.Name = "chk_zipbackup"
+        chk_zipbackup.Size = New Size(187, 25)
+        chk_zipbackup.TabIndex = 13
+        chk_zipbackup.Text = "Compress (zip) Backup"
+        chk_zipbackup.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(751, 394)
+        Controls.Add(chk_zipbackup)
         Controls.Add(Label6)
         Controls.Add(radio_filecopy)
         Controls.Add(radio_vacumm)
@@ -315,5 +328,6 @@ Partial Class Form1
     Friend WithEvents radio_vacumm As RadioButton
     Friend WithEvents radio_filecopy As RadioButton
     Friend WithEvents Label6 As Label
+    Friend WithEvents chk_zipbackup As CheckBox
 
 End Class

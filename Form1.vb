@@ -4,6 +4,7 @@ Imports System.Data.SQLite
 Imports System.Runtime.InteropServices
 Imports System.Reflection
 Imports System.IO.Enumeration
+Imports System.IO.Compression
 Public Class Form1
     Private configFilePath As String = "config.ini"
     Dim backup_enabled As Boolean
@@ -14,7 +15,7 @@ Public Class Form1
         LoadConfiguration()
     End Sub
 
-    Private Sub BackupDatabase(ByVal sourcelocation As String, ByVal backuplocation As String, ByVal silent As Boolean, ByVal appendtimestamp As Boolean, ByVal writelog As Boolean)
+    Private Sub BackupDatabase(ByVal sourcelocation As String, ByVal backuplocation As String, ByVal silent As Boolean, ByVal appendtimestamp As Boolean, ByVal writelog As Boolean, ByVal zip As Boolean)
 
         Dim _backuplocation As String = backuplocation
 
@@ -48,6 +49,20 @@ Public Class Form1
                 If File.Exists(sourcelocation) Then
                     ' Copy the source file to the backup destination
                     File.Copy(sourcelocation, _backuplocation, True)
+
+                    If zip = True Then
+                        Dim zipFileName As String = Path.ChangeExtension(_backuplocation, "zip")
+                        Using zipArchive As ZipArchive = ZipFile.Open(zipFileName, ZipArchiveMode.Create)
+                            zipArchive.CreateEntryFromFile(_backuplocation, Path.GetFileName(_backuplocation))
+                        End Using
+
+                        If File.Exists(zipFileName) Then
+                            File.Delete(_backuplocation)
+                        End If
+
+                    End If
+
+
                     If silent = False Then
                         MessageBox.Show("Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End If
@@ -83,8 +98,18 @@ Public Class Form1
 
                             ' Execute the Vacuum statement
                             Try
-                                didexport = cmd.ExecuteNonQuery
-                                'MsgBox("Response: " & cmd.ExecuteNonQuery)
+                                didexport = cmd.ExecuteNonQuery 'didexport should =0 on success, -1 if not!
+                                If zip = True Then
+                                    Dim zipFileName As String = Path.ChangeExtension(_backuplocation, "zip")
+                                    Using zipArchive As ZipArchive = ZipFile.Open(zipFileName, ZipArchiveMode.Create)
+                                        zipArchive.CreateEntryFromFile(_backuplocation, Path.GetFileName(_backuplocation))
+                                    End Using
+
+                                    If File.Exists(zipFileName) And didexport = 0 Then
+                                        File.Delete(_backuplocation)
+                                    End If
+
+                                End If
                             Catch ex As Exception
                                 MsgBox(ex.Message)
                             End Try
@@ -108,17 +133,6 @@ Public Class Form1
                 End If
             End Try
         End If
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -155,7 +169,7 @@ Public Class Form1
 
     Private Sub btnBackupNow_Click(sender As Object, e As EventArgs) Handles btnBackupNow.Click
 
-        BackupDatabase(txtSourceLocation.Text, txtBackupLocation.Text, False, chk_appendTimeStamp.Checked, False)
+        BackupDatabase(txtSourceLocation.Text, txtBackupLocation.Text, False, chk_appendTimeStamp.Checked, False, chk_zipbackup.Checked)
 
     End Sub
 
@@ -174,6 +188,8 @@ Public Class Form1
                 writer.WriteLine("AutomatedInterval=" & numeric_automatedInterval.Value)
                 writer.WriteLine("AutomatedAutoRun=" & chk_automated_runStart.Checked)
                 writer.WriteLine("BackupMode=" & backupmode)
+                writer.WriteLine("CompressBackup=" & chk_zipbackup.Checked)
+
 
             End Using
         Catch ex As Exception
@@ -204,7 +220,8 @@ Public Class Form1
                             chk_automated_runStart.Checked = value
                         ElseIf key = "BackupMode" Then
                             backupmode = value
-
+                        ElseIf key = "CompressBackup" Then
+                            chk_zipbackup.Checked = value
                         End If
                     End If
                 Next
@@ -257,11 +274,12 @@ Public Class Form1
                 backup_nextbackupseconds = numeric_automatedInterval.Value * 60
         End Select
         calculateNextBackup()
+
     End Sub
 
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        calculateNextBackup()
+        backup_nextbackupseconds = backup_nextbackupseconds - 1
 
         If backup_enabled = True Then
             Select Case pnl_automatedIndicator.BackColor
@@ -272,15 +290,15 @@ Public Class Form1
                 Case Color.Purple
                     pnl_automatedIndicator.BackColor = Color.White
             End Select
-            backup_nextbackupseconds = backup_nextbackupseconds - 1
 
             If backup_nextbackupseconds < 0 Then
                 pnl_automatedIndicator.BackColor = Color.Purple
 
 
-                BackupDatabase(txtSourceLocation.Text, txtBackupLocation.Text, True, chk_appendTimeStamp.Checked, False)
+                BackupDatabase(txtSourceLocation.Text, txtBackupLocation.Text, True, chk_appendTimeStamp.Checked, False, chk_zipbackup.Checked)
 
                 ResetBackup()
+
             End If
 
         Else
@@ -289,6 +307,7 @@ Public Class Form1
 
 
         End If
+        calculateNextBackup()
 
     End Sub
     Private Sub calculateNextBackup()
@@ -314,7 +333,6 @@ Public Class Form1
     End Sub
     Private Sub ResetBackup()
         backup_nextbackupseconds = numeric_automatedInterval.Value * 60
-        calculateNextBackup()
     End Sub
 
     Private Sub numeric_automatedInterval_KeyUp(sender As Object, e As KeyEventArgs) Handles numeric_automatedInterval.KeyUp
