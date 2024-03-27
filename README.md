@@ -1,39 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy SQLite Backup</title>
-</head>
-<body>
-    <h1>Easy SQLite Backup</h1>
-    
-    <p>Welcome to Easy SQLite Backup, a simple tool for backing up SQLite databases </p>
+Easy SQLite Backup, a simple tool for backing up SQLite databases.
 
-    <h2>Features</h2>
-    <ul>
-        <li>Simple and intuitive interface</li>
-        <li>Customizable backup options</li>
-        <li>Automated backup options</li>
-    </ul>
+## Features
+- Simple and intuitive interface
+- Customizable backup options
+- Automated backup options
 
-    <h2>Getting Started</h2>
-    <p>To use Easy SQLite Backup, follow these steps:</p>
-    <ol>
-        <li>Download and Extract the zip file/li>
-        <li>Launch the application</li>
-        <li>Select the SQLite database and destination</li>
-        <li>Choose the required options/li>
-        <li>Click "Backup Now" to backup the database or setup the automated backup options<li>
-    </ol>
+## Getting Started
+To use Easy SQLite Backup, follow these steps:
+1. Download and extract the zip file
+2. Launch the application
+3. Select the SQLite database and destination
+4. Choose the required options
+5. Click "Backup Now" to backup the database or set up the automated backup options
 
-    <h2>Contributing</h2>
-    <p>We welcome contributions from the community. If you'd like to contribute to Easy SQLite Backup, please fork the repository and submit a pull request with your changes.</p>
+## Contributing
+We welcome contributions from the community. If you'd like to contribute to Easy SQLite Backup, please fork the repository and submit a pull request with your changes.
 
-    <h2>Support</h2>
-    <p>If you encounter any issues or have any questions, feel free to raise an in issue.</p>
+## Support
+If you encounter any issues or have any questions, feel free to raise an issue.
 
-    <h2>License</h2>
-    <p>Easy SQLite Backup is licensed under the GPL-3.0 license. See the LICENSE file for details.</p>
-</body>
-</html>
+## License
+Easy SQLite Backup is licensed under the GPL-3.0 license. See the LICENSE file for details.
