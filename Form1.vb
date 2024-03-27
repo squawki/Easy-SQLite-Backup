@@ -5,6 +5,7 @@ Imports System.Runtime.InteropServices
 Imports System.Reflection
 Imports System.IO.Enumeration
 Imports System.IO.Compression
+Imports System.Threading.Channels
 Public Class Form1
     Private configFilePath As String = "config.ini"
     Dim backup_enabled As Boolean
@@ -13,6 +14,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadConfiguration()
+        NotifyIcon1.Visible = True
     End Sub
 
     Private Sub BackupDatabase(ByVal sourcelocation As String, ByVal backuplocation As String, ByVal silent As Boolean, ByVal appendtimestamp As Boolean, ByVal writelog As Boolean, ByVal zip As Boolean)
@@ -64,17 +66,29 @@ Public Class Form1
 
 
                     If silent = False Then
-                        MessageBox.Show("Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        MessageBox.Show("Backup completed successfully", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    End If
+                    If silent = True And chk_popupnotificatons.Checked Then
+                        NotifyIcon1.BalloonTipText = "Backup Successfull: " & Path.GetFileName(_backuplocation)
+                        NotifyIcon1.ShowBalloonTip(10)
                     End If
                 Else
                     If silent = False Then
                         MessageBox.Show("Source database file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
+                    NotifyIcon1.BalloonTipText = "Error Source database file does not exist"
+                    NotifyIcon1.ShowBalloonTip(10)
                 End If
             Catch ex As Exception
                 If silent = False Then
                     MessageBox.Show("Error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End If
+                If silent = True And chk_popupnotificatons.Checked Then
+                    NotifyIcon1.BalloonTipText = "Error occurred: " & ex.Message
+                    NotifyIcon1.ShowBalloonTip(10)
+                End If
+
+
             End Try
         End If
 
@@ -122,6 +136,10 @@ Public Class Form1
                     If silent = False And didexport = 0 Then
                         MessageBox.Show("Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End If
+                    If silent = True And chk_popupnotificatons.Checked And didexport = 0 Then
+                        NotifyIcon1.BalloonTipText = "Backup Successfull: " & Path.GetFileName(_backuplocation)
+                        NotifyIcon1.ShowBalloonTip(10)
+                    End If
                 Else
                     If silent = False Then
                         MessageBox.Show("Source database file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -130,6 +148,10 @@ Public Class Form1
             Catch ex As Exception
                 If silent = False Then
                     MessageBox.Show("Error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+                If silent = True And chk_popupnotificatons.Checked Then
+                    NotifyIcon1.BalloonTipText = "Error occurred: " & ex.Message
+                    NotifyIcon1.ShowBalloonTip(10)
                 End If
             End Try
         End If
@@ -189,6 +211,7 @@ Public Class Form1
                 writer.WriteLine("AutomatedAutoRun=" & chk_automated_runStart.Checked)
                 writer.WriteLine("BackupMode=" & backupmode)
                 writer.WriteLine("CompressBackup=" & chk_zipbackup.Checked)
+                writer.WriteLine("Notifications=" & chk_popupnotificatons.Checked)
 
 
             End Using
@@ -222,6 +245,8 @@ Public Class Form1
                             backupmode = value
                         ElseIf key = "CompressBackup" Then
                             chk_zipbackup.Checked = value
+                        ElseIf key = "Notifications" Then
+                            chk_popupnotificatons.Checked = value
                         End If
                     End If
                 Next
@@ -240,10 +265,15 @@ Public Class Form1
                 Select Case backupmode
                     Case "VACUUM"
                         radio_vacumm.Checked = True
+                        radio_filecopy.Checked = False
+
                     Case "FILECOPY"
                         radio_filecopy.Checked = True
+                        radio_vacumm.Checked = False
                     Case Else
                         radio_vacumm.Checked = True
+                        radio_filecopy.Checked = False
+
                 End Select
 
 
@@ -340,5 +370,33 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Form1_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        If Me.WindowState = FormWindowState.Minimized Then
+            NotifyIcon1.Visible = True
+            Me.ShowInTaskbar = False
+        Else
+            NotifyIcon1.Visible = False
+            Me.ShowInTaskbar = True
+            Me.Visible = True
+        End If
+
+    End Sub
+
+    Private Sub NotifyIcon1_DoubleClick(sender As Object, e As EventArgs) Handles NotifyIcon1.DoubleClick
+        Me.Visible = True
+        Me.WindowState = FormWindowState.Normal
+        Me.ShowInTaskbar = True
+    End Sub
+
+    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Dim answer As Integer
+
+        answer = MsgBox("Are You Sure You Want To Exit", vbExclamation + vbYesNo + vbDefaultButton2, "Exit Easy SQLite?")
+
+        If answer = vbYes Then
+        Else
+            e.Cancel = True
+        End If
+    End Sub
 End Class
 

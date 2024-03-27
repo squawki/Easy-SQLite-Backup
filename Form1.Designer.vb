@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         txtSourceLocation = New TextBox()
         lblSource = New Label()
         Label1 = New Label()
@@ -46,6 +47,8 @@ Partial Class Form1
         radio_filecopy = New RadioButton()
         Label6 = New Label()
         chk_zipbackup = New CheckBox()
+        NotifyIcon1 = New NotifyIcon(components)
+        chk_popupnotificatons = New CheckBox()
         Panel1.SuspendLayout()
         CType(numeric_automatedInterval, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -120,6 +123,7 @@ Partial Class Form1
         ' Panel1
         ' 
         Panel1.BackColor = Color.LemonChiffon
+        Panel1.Controls.Add(chk_popupnotificatons)
         Panel1.Controls.Add(lblNextBackupDisplay)
         Panel1.Controls.Add(Label5)
         Panel1.Controls.Add(pnl_automatedIndicator)
@@ -131,13 +135,13 @@ Partial Class Form1
         Panel1.Controls.Add(Label2)
         Panel1.Location = New Point(480, 182)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(225, 146)
+        Panel1.Size = New Size(225, 179)
         Panel1.TabIndex = 7
         ' 
         ' lblNextBackupDisplay
         ' 
         lblNextBackupDisplay.AutoSize = True
-        lblNextBackupDisplay.Location = New Point(103, 126)
+        lblNextBackupDisplay.Location = New Point(103, 149)
         lblNextBackupDisplay.Name = "lblNextBackupDisplay"
         lblNextBackupDisplay.Size = New Size(17, 15)
         lblNextBackupDisplay.TabIndex = 12
@@ -146,7 +150,7 @@ Partial Class Form1
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Location = New Point(24, 126)
+        Label5.Location = New Point(24, 149)
         Label5.Name = "Label5"
         Label5.Size = New Size(80, 15)
         Label5.TabIndex = 11
@@ -155,7 +159,7 @@ Partial Class Form1
         ' pnl_automatedIndicator
         ' 
         pnl_automatedIndicator.BackColor = Color.White
-        pnl_automatedIndicator.Location = New Point(164, 94)
+        pnl_automatedIndicator.Location = New Point(164, 117)
         pnl_automatedIndicator.Name = "pnl_automatedIndicator"
         pnl_automatedIndicator.Size = New Size(19, 21)
         pnl_automatedIndicator.TabIndex = 9
@@ -163,7 +167,7 @@ Partial Class Form1
         ' btn_automatedEnabled
         ' 
         btn_automatedEnabled.FlatStyle = FlatStyle.Flat
-        btn_automatedEnabled.Location = New Point(25, 92)
+        btn_automatedEnabled.Location = New Point(25, 115)
         btn_automatedEnabled.Name = "btn_automatedEnabled"
         btn_automatedEnabled.Size = New Size(133, 25)
         btn_automatedEnabled.TabIndex = 8
@@ -280,6 +284,23 @@ Partial Class Form1
         chk_zipbackup.Text = "Compress (zip) Backup"
         chk_zipbackup.UseVisualStyleBackColor = True
         ' 
+        ' NotifyIcon1
+        ' 
+        NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), Icon)
+        NotifyIcon1.Text = "NotifyIcon1"
+        NotifyIcon1.Visible = True
+        ' 
+        ' chk_popupnotificatons
+        ' 
+        chk_popupnotificatons.AutoSize = True
+        chk_popupnotificatons.Font = New Font("Segoe UI", 9F)
+        chk_popupnotificatons.Location = New Point(25, 86)
+        chk_popupnotificatons.Name = "chk_popupnotificatons"
+        chk_popupnotificatons.Size = New Size(132, 19)
+        chk_popupnotificatons.TabIndex = 13
+        chk_popupnotificatons.Text = "Popup Notifications"
+        chk_popupnotificatons.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -298,6 +319,8 @@ Partial Class Form1
         Controls.Add(txtBackupLocation)
         Controls.Add(lblSource)
         Controls.Add(txtSourceLocation)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        MaximizeBox = False
         Name = "Form1"
         Text = "Easy SQLite Backup"
         Panel1.ResumeLayout(False)
@@ -329,5 +352,7 @@ Partial Class Form1
     Friend WithEvents radio_filecopy As RadioButton
     Friend WithEvents Label6 As Label
     Friend WithEvents chk_zipbackup As CheckBox
+    Friend WithEvents NotifyIcon1 As NotifyIcon
+    Friend WithEvents chk_popupnotificatons As CheckBox
 
 End Class
