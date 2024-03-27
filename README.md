@@ -1,4 +1,4 @@
-Easy SQLite Backup, a simple tool for backing up SQLite databases.
+Easy SQLite Backup, a simple Windows Gui tool for backing up SQLite databases.
 
 ## Features
 - Simple and intuitive interface
