@@ -15,6 +15,7 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadConfiguration()
         NotifyIcon1.Visible = True
+        WriteToLog("test")
     End Sub
 
     Private Sub BackupDatabase(ByVal sourcelocation As String, ByVal backuplocation As String, ByVal silent As Boolean, ByVal appendtimestamp As Boolean, ByVal writelog As Boolean, ByVal zip As Boolean)
@@ -68,6 +69,9 @@ Public Class Form1
                     If silent = False Then
                         MessageBox.Show("Backup completed successfully", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End If
+                    If chk_writeLog.Checked Then
+                        WriteToLog("Backup Succesfull: " & _backuplocation)
+                    End If
                     If silent = True And chk_popupnotificatons.Checked Then
                         NotifyIcon1.BalloonTipText = "Backup Successfull: " & Path.GetFileName(_backuplocation)
                         NotifyIcon1.ShowBalloonTip(10)
@@ -76,12 +80,18 @@ Public Class Form1
                     If silent = False Then
                         MessageBox.Show("Source database file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
+                    If chk_writeLog.Checked Then
+                        WriteToLog("Source Database does not exist: " & _backuplocation)
+                    End If
                     NotifyIcon1.BalloonTipText = "Error Source database file does not exist"
                     NotifyIcon1.ShowBalloonTip(10)
                 End If
             Catch ex As Exception
                 If silent = False Then
                     MessageBox.Show("Error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+                If chk_writeLog.Checked Then
+                    WriteToLog("Error Occurred: " & ex.Message & vbCrLf & _backuplocation)
                 End If
                 If silent = True And chk_popupnotificatons.Checked Then
                     NotifyIcon1.BalloonTipText = "Error occurred: " & ex.Message
@@ -140,9 +150,15 @@ Public Class Form1
                         NotifyIcon1.BalloonTipText = "Backup Successfull: " & Path.GetFileName(_backuplocation)
                         NotifyIcon1.ShowBalloonTip(10)
                     End If
+                    If chk_writeLog.Checked Then
+                        WriteToLog("Backup Succesfull: " & _backuplocation)
+                    End If
                 Else
                     If silent = False Then
                         MessageBox.Show("Source database file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
+                    If chk_writeLog.Checked Then
+                        WriteToLog("Source database file does not exist: " & _backuplocation)
                     End If
                 End If
             Catch ex As Exception
@@ -152,6 +168,9 @@ Public Class Form1
                 If silent = True And chk_popupnotificatons.Checked Then
                     NotifyIcon1.BalloonTipText = "Error occurred: " & ex.Message
                     NotifyIcon1.ShowBalloonTip(10)
+                End If
+                If chk_writeLog.Checked Then
+                    WriteToLog("Error Occured: " & ex.Message & vbCrLf & _backuplocation)
                 End If
             End Try
         End If
@@ -212,7 +231,7 @@ Public Class Form1
                 writer.WriteLine("BackupMode=" & backupmode)
                 writer.WriteLine("CompressBackup=" & chk_zipbackup.Checked)
                 writer.WriteLine("Notifications=" & chk_popupnotificatons.Checked)
-
+                writer.WriteLine("WriteLog=" & chk_writeLog.Checked)
 
             End Using
         Catch ex As Exception
@@ -247,6 +266,8 @@ Public Class Form1
                             chk_zipbackup.Checked = value
                         ElseIf key = "Notifications" Then
                             chk_popupnotificatons.Checked = value
+                        ElseIf key = "WriteLog" Then
+                            chk_writeLog.Checked = value
                         End If
                     End If
                 Next
@@ -397,6 +418,16 @@ Public Class Form1
         Else
             e.Cancel = True
         End If
+    End Sub
+
+    Public Sub WriteToLog(ByVal message As String)
+        Dim logFilePath As String = "backup.log" 'Specify your log file path here
+        Dim timestamp As String = DateTime.Now.ToString("[dd-MM-yyyy HH:mm:ss]")
+
+        'Create or append to the log file
+        Using writer As StreamWriter = File.AppendText(logFilePath)
+            writer.WriteLine(timestamp & " - " & message)
+        End Using
     End Sub
 End Class
 

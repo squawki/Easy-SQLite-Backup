@@ -32,6 +32,7 @@ Partial Class Form1
         btnBackupNow = New Button()
         btnSaveConfig = New Button()
         Panel1 = New Panel()
+        chk_popupnotificatons = New CheckBox()
         lblNextBackupDisplay = New Label()
         Label5 = New Label()
         pnl_automatedIndicator = New Panel()
@@ -48,7 +49,7 @@ Partial Class Form1
         Label6 = New Label()
         chk_zipbackup = New CheckBox()
         NotifyIcon1 = New NotifyIcon(components)
-        chk_popupnotificatons = New CheckBox()
+        chk_writeLog = New CheckBox()
         Panel1.SuspendLayout()
         CType(numeric_automatedInterval, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -123,6 +124,7 @@ Partial Class Form1
         ' Panel1
         ' 
         Panel1.BackColor = Color.LemonChiffon
+        Panel1.Controls.Add(chk_writeLog)
         Panel1.Controls.Add(chk_popupnotificatons)
         Panel1.Controls.Add(lblNextBackupDisplay)
         Panel1.Controls.Add(Label5)
@@ -135,13 +137,24 @@ Partial Class Form1
         Panel1.Controls.Add(Label2)
         Panel1.Location = New Point(480, 182)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(225, 179)
+        Panel1.Size = New Size(225, 206)
         Panel1.TabIndex = 7
+        ' 
+        ' chk_popupnotificatons
+        ' 
+        chk_popupnotificatons.AutoSize = True
+        chk_popupnotificatons.Font = New Font("Segoe UI", 9F)
+        chk_popupnotificatons.Location = New Point(25, 86)
+        chk_popupnotificatons.Name = "chk_popupnotificatons"
+        chk_popupnotificatons.Size = New Size(132, 19)
+        chk_popupnotificatons.TabIndex = 13
+        chk_popupnotificatons.Text = "Popup Notifications"
+        chk_popupnotificatons.UseVisualStyleBackColor = True
         ' 
         ' lblNextBackupDisplay
         ' 
         lblNextBackupDisplay.AutoSize = True
-        lblNextBackupDisplay.Location = New Point(103, 149)
+        lblNextBackupDisplay.Location = New Point(94, 184)
         lblNextBackupDisplay.Name = "lblNextBackupDisplay"
         lblNextBackupDisplay.Size = New Size(17, 15)
         lblNextBackupDisplay.TabIndex = 12
@@ -150,7 +163,7 @@ Partial Class Form1
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Location = New Point(24, 149)
+        Label5.Location = New Point(15, 184)
         Label5.Name = "Label5"
         Label5.Size = New Size(80, 15)
         Label5.TabIndex = 11
@@ -159,7 +172,7 @@ Partial Class Form1
         ' pnl_automatedIndicator
         ' 
         pnl_automatedIndicator.BackColor = Color.White
-        pnl_automatedIndicator.Location = New Point(164, 117)
+        pnl_automatedIndicator.Location = New Point(155, 152)
         pnl_automatedIndicator.Name = "pnl_automatedIndicator"
         pnl_automatedIndicator.Size = New Size(19, 21)
         pnl_automatedIndicator.TabIndex = 9
@@ -167,7 +180,7 @@ Partial Class Form1
         ' btn_automatedEnabled
         ' 
         btn_automatedEnabled.FlatStyle = FlatStyle.Flat
-        btn_automatedEnabled.Location = New Point(25, 115)
+        btn_automatedEnabled.Location = New Point(16, 150)
         btn_automatedEnabled.Name = "btn_automatedEnabled"
         btn_automatedEnabled.Size = New Size(133, 25)
         btn_automatedEnabled.TabIndex = 8
@@ -290,22 +303,22 @@ Partial Class Form1
         NotifyIcon1.Text = "NotifyIcon1"
         NotifyIcon1.Visible = True
         ' 
-        ' chk_popupnotificatons
+        ' chk_writeLog
         ' 
-        chk_popupnotificatons.AutoSize = True
-        chk_popupnotificatons.Font = New Font("Segoe UI", 9F)
-        chk_popupnotificatons.Location = New Point(25, 86)
-        chk_popupnotificatons.Name = "chk_popupnotificatons"
-        chk_popupnotificatons.Size = New Size(132, 19)
-        chk_popupnotificatons.TabIndex = 13
-        chk_popupnotificatons.Text = "Popup Notifications"
-        chk_popupnotificatons.UseVisualStyleBackColor = True
+        chk_writeLog.AutoSize = True
+        chk_writeLog.Font = New Font("Segoe UI", 9F)
+        chk_writeLog.Location = New Point(25, 105)
+        chk_writeLog.Name = "chk_writeLog"
+        chk_writeLog.Size = New Size(92, 19)
+        chk_writeLog.TabIndex = 14
+        chk_writeLog.Text = "Write To Log"
+        chk_writeLog.UseVisualStyleBackColor = True
         ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(751, 394)
+        ClientSize = New Size(751, 417)
         Controls.Add(chk_zipbackup)
         Controls.Add(Label6)
         Controls.Add(radio_filecopy)
@@ -354,5 +367,6 @@ Partial Class Form1
     Friend WithEvents chk_zipbackup As CheckBox
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents chk_popupnotificatons As CheckBox
+    Friend WithEvents chk_writeLog As CheckBox
 
 End Class
