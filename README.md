@@ -1,5 +1,8 @@
 Easy SQLite Backup, a simple Windows Gui tool for backing up SQLite databases.
 
+![Feature Image]([image_url](https://raw.githubusercontent.com/squawki/Easy-SQLite-Backup/master/screenshots/easySQLiteBackup_featureImage.png))
+
+
 ## Features
 - Simple and intuitive interface
 - Customizable backup options
